@@ -1,0 +1,103 @@
+/* Navigation Bar */
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(14, 11, 45);
+    /* dark gray */
+    padding: 12px 20px;
+    color: white;
+}
+
+
+.kk {
+    height: 60px;
+    /* same as h-10 in Tailwind */
+    width: 100;
+    /* preserve aspect ratio */
+    margin-right: 1px;
+    /* spacing from text or other elements */
+    object-fit: contain;
+    /* ensure full image fits in container */
+    transition: transform 0.2s ease-in-out;
+    /* smooth hover animation */
+    cursor: pointer;
+}
+
+.kk:hover {
+    transform: scale(1.05);
+    /* slight zoom on hover */
+}
+
+.nav-logo:hover {
+    color: #3b82f6;
+    /* blue-500 */
+}
+
+/* Right Side Links */
+.nav-right {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Default Nav Links */
+.nav-item {
+    text-decoration: none;
+    color: white;
+background: linear-gradient(45deg, #836726);
+    font-size: 1rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: 0.2s;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Buttons for Login / Admin */
+.nav-item.bg-blue-600 {
+    background: #2563eb;
+    /* blue-600 */
+}
+
+.nav-item.bg-blue-600:hover {
+    background: #1e40af;
+    /* blue-800 */
+}
+
+.nav-item.bg-green-600 {
+    background: #16a34a;
+    /* green-600 */
+}
+
+.nav-item.bg-green-600:hover {
+    background: #166534;
+    /* green-800 */
+}
+
+/* Logout Button */
+.btn-logout {
+    background: #dc2626;
+    /* red-600 */
+    color: white;
+    font-weight: bold;
+}
+
+.btn-logout:hover {
+    background: #7f1d1d;
+    /* red-900 */
+}
+
+/* Cart Link */
+.nav-item.cart {
+    background: #3b82f6;
+    /* blue-500 */
+    color: white;
+    border-radius: 20px;
+}
+
+.nav-item.cart:hover {
+    background: #1e40af;
+}

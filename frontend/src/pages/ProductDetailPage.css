@@ -1,0 +1,241 @@
+.product-detail-page {
+    min-height: 100vh;
+    background: #f8f9fa;
+    padding: 2rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.back-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    transition: background 0.2s;
+}
+
+.back-btn:hover {
+    background: #5a6268;
+}
+
+.product-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    background: white;
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-image-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.large-product-image {
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.large-emoji {
+    font-size: 12rem;
+    display: block;
+}
+
+.product-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.product-header {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1.5rem;
+}
+
+.product-category {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 1rem 0;
+    line-height: 1.2;
+}
+
+.current-price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.product-description h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.product-description p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+.product-stock-info {
+    padding: 1rem;
+    border-radius: 10px;
+    background: #f8f9fa;
+}
+
+.stock-available {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.stock-unavailable {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.stock-icon {
+    font-size: 1.2rem;
+}
+
+.purchase-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.quantity-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quantity-section label {
+    font-weight: bold;
+    color: #333;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 10px;
+}
+
+.qty-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: #3498db;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.qty-btn:hover:not(:disabled) {
+    background: #2980b9;
+}
+
+.qty-btn:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+}
+
+.quantity-display {
+    font-size: 1.3rem;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+}
+
+.add-to-cart-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.2s;
+    min-height: 60px;
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+    background: #229954;
+    transform: translateY(-2px);
+}
+
+.add-to-cart-btn:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.add-to-cart-btn.adding {
+    background: #27ae60;
+    transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+    .product-detail {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .large-emoji {
+        font-size: 8rem;
+    }
+
+    .product-title {
+        font-size: 2rem;
+    }
+
+    .current-price {
+        font-size: 2rem;
+    }
+
+    .quantity-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}

@@ -1,0 +1,430 @@
+/* AdminDashboard.css */
+
+/* Import modern font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #e0e6ed;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    min-height: 100vh;
+}
+
+.admin-dashboard {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 30px;
+    border-radius: 16px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header h1 {
+    color: #00d4ff;
+    font-size: 2rem;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.admin-header button {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.admin-header button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Loading and Error */
+.loading,
+.error {
+    text-align: center;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loading {
+    color: #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.error {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+/* Sections */
+section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 40px;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #00d4ff, #0099cc, #00d4ff);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+section h2 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Add New Product Button */
+section button:not(.product-form button):not(tbody button) {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    margin-bottom: 25px;
+}
+
+section button:not(.product-form button):not(tbody button):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+/* Product Form */
+.product-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.product-form input {
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e0e6ed;
+    transition: all 0.3s ease;
+}
+
+.product-form input::placeholder {
+    color: rgba(224, 230, 237, 0.6);
+}
+
+.product-form input:focus {
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.product-form input[type="number"] {
+    width: 100%;
+}
+
+.product-form button {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    grid-column: span 2;
+    justify-self: start;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.product-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+}
+
+.product-form button[type="button"] {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    grid-column: span 2;
+    justify-self: end;
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+}
+
+.product-form button[type="button"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+thead th {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #ffffff;
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+tbody td {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: top;
+}
+
+tbody tr:hover {
+    background: rgba(0, 212, 255, 0.05);
+    transition: background 0.3s ease;
+}
+
+/* Images in table */
+tbody img {
+    max-width: 60px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease;
+}
+
+tbody img:hover {
+    transform: scale(1.1);
+}
+
+/* Action Buttons */
+tbody button {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+    display: inline-block;
+}
+
+tbody button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+}
+
+tbody button:last-child {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    margin-right: 0;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+tbody button:last-child:hover {
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+/* Orders specific */
+.order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.order-items div {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mark-delivered {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3) !important;
+}
+
+.mark-delivered:hover {
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-dashboard {
+        padding: 15px;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .admin-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .product-form {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .product-form button {
+        grid-column: 1;
+        justify-self: stretch;
+        margin-top: 10px;
+    }
+
+    section {
+        padding: 20px;
+    }
+
+    table {
+        font-size: 0.85rem;
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+    }
+
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        margin-bottom: 15px;
+        padding: 15px;
+        display: block;
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: block;
+        text-align: right;
+    }
+
+    td::before {
+        content: attr(data-label) ": ";
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+        color: #00d4ff;
+    }
+
+    tbody img {
+        max-width: 40px;
+    }
+
+    tbody button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        margin: 5px 5px 0 0;
+    }
+}
+
+@media (max-width: 480px) {
+    section h2 {
+        font-size: 1.4rem;
+    }
+
+    .product-form input {
+        padding: 12px;
+    }
+
+    .product-form button {
+        padding: 12px;
+    }
+}
