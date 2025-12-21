@@ -1,5 +1,8 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import HomePage from "./pages/HomePage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import LoginPage from "./pages/LoginPage";
@@ -11,6 +14,13 @@ import Navigation from "./components/Navigation";
 import NotFoundPage from "./pages/NotFoundPage";
 import { useAuth } from "./hooks/useAuth";
 import UserDashboard from "./pages/userDashboard";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import PaymentForm from "./components/PaymentForm";
+
+// Initialize Stripe
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY || "pk_test_sample");
 
 // Separate PrivateRoute for user
 const UserPrivateRoute = ({ children }) => {
@@ -26,7 +36,8 @@ const AdminPrivateRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <>
+    <Elements stripe={stripePromise}>
+      <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       <Navigation />
       <Routes>
         {/* Public Routes */}
@@ -34,6 +45,8 @@ const App = () => {
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/admin/login" element={<AdminLogin />} />
 
         {/* User Protected Routes */}
@@ -53,6 +66,14 @@ const App = () => {
             </UserPrivateRoute>
           }
         />
+        <Route
+          path="/order/:id"
+          element={
+            <UserPrivateRoute>
+              <OrderDetailsPage />
+            </UserPrivateRoute>
+          }
+        />
 
         {/* Admin Protected Routes */}
         <Route
@@ -67,7 +88,7 @@ const App = () => {
         {/* 404 Not Found */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+    </Elements>
   );
 };
 

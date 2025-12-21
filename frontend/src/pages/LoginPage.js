@@ -80,17 +80,13 @@ const LoginPage = () => {
             </div>
 
             <button type="submit" className="auth-btn" disabled={loading}>
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? "Logging in..." : "Login"}
             </button>
           </form>
 
-          <div className="auth-footer">
-            <p>
-              Don't have an account?{" "}
-              <Link to="/signup" className="auth-link">
-                Sign up here
-              </Link>
-            </p>
+          <div className="auth-links">
+            <Link to="/forgot-password">Forgot Password?</Link>
+            <Link to="/signup">Don't have an account? Sign up</Link>
           </div>
 
           <div className="demo-credentials">

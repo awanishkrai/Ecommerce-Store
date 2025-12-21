@@ -28,7 +28,7 @@ export const apiService = {
   getUsers: () => api.get("/users", { headers: getHeaders(true) }),
 
   // 🔹 Products
-  getProducts: () => api.get("/products"),
+  getProducts: (params) => api.get("/products", { params }),
   getProduct: (id) => api.get(`/products/${id}`),
   createProduct: (data) =>
     api.post("/products", data, { headers: getHeaders(true) }),
@@ -76,6 +76,15 @@ export const apiService = {
 
   deleteAddress: (id) =>
     api.delete(`/addresses/${id}`, { headers: getHeaders(false) }),
+
+  // Payments
+  createPaymentIntent: (amount) =>
+    api.post("/payment/create-payment-intent", { amount }, { headers: getHeaders(false) }),
+
+  // Password Reset
+  forgotPassword: (email) => api.post("/users/forgot-password", { email }),
+  resetPassword: (token, password) =>
+    api.post(`/users/reset-password/${token}`, { password }),
 };
 
 export default api;

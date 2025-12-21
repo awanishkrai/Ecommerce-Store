@@ -1,7 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+
+// Load environment variables immediately
+dotenv.config();
+
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const connectDB = require("./config/db");
+const logger = require("./utils/logger");
+const orderRoutes = require("./routes/orders");
+const paymentRoutes = require("./routes/paymentRoutes");
+const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 // Load environment variables
 dotenv.config();
@@ -11,7 +21,7 @@ const requiredEnvVars = ["MONGO_URI", "JWT_SECRET"];
 const missingEnvVars = requiredEnvVars.filter((varName) => !process.env[varName]);
 
 if (missingEnvVars.length > 0) {
-  console.error(`❌ Missing required environment variables: ${missingEnvVars.join(", ")}`);
+  logger.error(`❌ Missing required environment variables: ${missingEnvVars.join(", ")}`);
   console.error("Please create a .env file with the required variables.");
   process.exit(1);
 }
@@ -21,8 +31,20 @@ connectDB();
 
 const app = express();
 
+// Security Middleware
+app.use(helmet());
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
+
 // Middleware
-app.use(cors());
+app.use(cors()); // In production, configure origin: 'https://your-frontend.com'
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,7 +53,7 @@ app.use("/uploads", express.static("uploads"));
 
 // Custom middleware for logging
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path} - ${new Date().toISOString()}`);
+  logger.info(`${req.method} ${req.path}`);
   next();
 });
 
@@ -40,6 +62,7 @@ app.use("/api/products", require("./routes/products"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/addresses", require("./routes/addressRoutes"));
+app.use("/api/payment", paymentRoutes);
 
 // Basic route
 app.get("/", (req, res) => {

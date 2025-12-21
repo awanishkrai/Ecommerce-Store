@@ -4,6 +4,8 @@ import { useCart } from "../hooks/useCart";
 import { useAuth } from "../hooks/useAuth";
 import { apiService } from "../services/api";
 import LoadingSpinner from "../components/common/LoadingSpinner";
+import toast from "react-hot-toast";
+import PaymentForm from "../components/PaymentForm";
 import "./CartPage.css";
 
 const CartPage = () => {
@@ -14,6 +16,7 @@ const CartPage = () => {
 
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("COD");
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,6 +53,7 @@ const CartPage = () => {
   // Checkout
   const handleCheckout = async () => {
     if (!user) {
+      toast.error("Please login to checkout");
       navigate("/login", { state: { from: "/cart" } });
       return;
     }
@@ -58,7 +62,7 @@ const CartPage = () => {
       (addr) => addr._id === selectedAddressId
     );
     if (!selectedAddress) {
-      alert("Please select a shipping address.");
+      toast.error("Please select a shipping address.");
       return;
     }
 
@@ -80,11 +84,12 @@ const CartPage = () => {
       await apiService.createOrder(orderData);
       clearCart();
       setOrderSuccess(true);
+      toast.success("Order placed successfully!");
 
       setTimeout(() => navigate("/"), 3000);
     } catch (error) {
       console.error("Checkout failed:", error);
-      alert("Checkout failed. Please try again.");
+      toast.error(error.response?.data?.message || "Checkout failed. Please try again.");
     } finally {
       setIsCheckingOut(false);
     }
@@ -174,18 +179,57 @@ const CartPage = () => {
 
                 <hr />
 
-                <div className="summary-row total">
-                  <span>Total:</span>
-                  <span>${getCartTotal().toFixed(2)}</span>
+                <div className="payment-section">
+                  <h3>Payment Method</h3>
+                  <div className="payment-options">
+                    <label className={`payment-option ${paymentMethod === 'COD' ? 'selected' : ''}`}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="COD"
+                        checked={paymentMethod === "COD"}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <span>Cash on Delivery</span>
+                    </label>
+                    <label className={`payment-option ${paymentMethod === 'Card' ? 'selected' : ''}`}>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="Card"
+                        checked={paymentMethod === "Card"}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <span>Pay with Card</span>
+                    </label>
+                  </div>
                 </div>
 
-                <button
-                  className="checkout-btn"
-                  onClick={handleCheckout}
-                  disabled={cart.length === 0 || addresses.length === 0}
-                >
-                  {user ? "Proceed to Checkout" : "Login to Checkout"}
-                </button>
+                {paymentMethod === "Card" && user && addresses.length > 0 ? (
+                  <div className="stripe-container">
+                    {addresses.find(a => a._id === selectedAddressId) ? (
+                      <PaymentForm
+                        orderData={{
+                          orderItems: cart, // Pass cart directly, logic handled in PaymentForm or backend
+                          totalPrice: getCartTotal(),
+                          shippingAddress: addresses.find(a => a._id === selectedAddressId),
+                          user: user
+                        }}
+                        clearCart={clearCart}
+                      />
+                    ) : (
+                      <p className="error-text">Please select an address first.</p>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    className="checkout-btn"
+                    onClick={handleCheckout}
+                    disabled={cart.length === 0 || addresses.length === 0}
+                  >
+                    {user ? "Place Order (COD)" : "Login to Checkout"}
+                  </button>
+                )}
 
                 {!user && (
                   <p className="login-notice">

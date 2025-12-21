@@ -2,6 +2,8 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Admin = require("../models/Admin");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 const { protect } = require("../middleware/auth"); // user middleware
 const adminProtect = require("../middleware/adminAuth"); // admin middleware
@@ -131,6 +133,99 @@ router.get("/", adminProtect, async (req, res) => {
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
+
+// ------------------ Forgot Password ------------------
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+
+    // Hash token and save to user
+    user.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    // Set expiry (10 minutes)
+    user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+    await user.save();
+
+    // Send email
+    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+
+    // Create transporter (Note: Configure env vars for production)
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SMTP_EMAIL || "temp@example.com",
+        pass: process.env.SMTP_PASSWORD || "temp",
+      },
+    });
+
+    const message = `
+      <h1>Password Reset</h1>
+      <p>You requested a password reset</p>
+      <a href="${resetUrl}" clicktracking=off>${resetUrl}</a>
+    `;
+
+    try {
+      // In real app, uncomment sendMail
+      // await transporter.sendMail({
+      //     to: user.email,
+      //     subject: "Password Reset Request",
+      //     html: message
+      // });
+
+      // For dev, just log link
+      console.log("Reset Link:", resetUrl);
+
+      res.status(200).json({ success: true, data: "Email sent (Check console for link in dev)" });
+    } catch (err) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+      return res.status(500).json({ message: "Email could not be sent" });
+    }
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// ------------------ Reset Password ------------------
+router.post("/reset-password/:resetToken", async (req, res) => {
+  try {
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(req.params.resetToken)
+      .digest("hex");
+
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.status(200).json({ success: true, data: "Password Updated Success", token: generateToken(user._id) });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 

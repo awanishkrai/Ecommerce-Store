@@ -1,39 +1,19 @@
 .product-detail-page {
     min-height: 100vh;
-    background: #f8f9fa;
+    background: var(--bg-body);
     padding: 2rem 0;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.back-btn {
-    background: #6c757d;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    margin-bottom: 2rem;
-    transition: background 0.2s;
-}
-
-.back-btn:hover {
-    background: #5a6268;
-}
+/* ... */
 
 .product-detail {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
-    background: white;
-    border-radius: 15px;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
     padding: 3rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
 }
 
 .product-image-section {
@@ -43,8 +23,8 @@
 }
 
 .large-product-image {
-    background: #f8f9fa;
-    border-radius: 20px;
+    background: var(--bg-body);
+    border-radius: var(--radius-lg);
     padding: 3rem;
     text-align: center;
     width: 100%;
@@ -63,15 +43,15 @@
 }
 
 .product-header {
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 1.5rem;
 }
 
 .product-category {
-    background: #e3f2fd;
-    color: #1565c0;
+    background: rgba(var(--primary-color), 0.1);
+    color: var(--primary-color);
     padding: 0.5rem 1rem;
-    border-radius: 20px;
+    border-radius: var(--radius-full);
     font-size: 0.875rem;
     font-weight: bold;
     text-transform: uppercase;
@@ -81,7 +61,7 @@
 .product-title {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #333;
+    color: var(--text-main);
     margin: 1rem 0;
     line-height: 1.2;
 }
@@ -89,17 +69,17 @@
 .current-price {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #27ae60;
+    color: var(--success);
 }
 
 .product-description h3 {
-    color: #333;
+    color: var(--text-main);
     margin-bottom: 1rem;
     font-size: 1.3rem;
 }
 
 .product-description p {
-    color: #666;
+    color: var(--text-muted);
     line-height: 1.6;
     font-size: 1.1rem;
 }

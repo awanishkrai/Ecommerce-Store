@@ -27,11 +27,54 @@ const upload = multer({ storage });
 
 // ------------------ PUBLIC ROUTES ------------------
 
-// Get all products
+// Get all products with Search, Filter & Pagination
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find({});
-    res.json(products);
+    const { keyword, category, minPrice, maxPrice, pageNumber } = req.query;
+
+    // 1. Search (Keyword)
+    const keywordFilter = keyword
+      ? {
+        name: {
+          $regex: keyword,
+          $options: "i", // case insensitive
+        },
+      }
+      : {};
+
+    // 2. Filter (Category)
+    const categoryFilter = category ? { category } : {};
+
+    // 3. Filter (Price)
+    const priceFilter = {};
+    if (minPrice || maxPrice) {
+      priceFilter.price = {};
+      if (minPrice) priceFilter.price.$gte = Number(minPrice);
+      if (maxPrice) priceFilter.price.$lte = Number(maxPrice);
+    }
+
+    // Combine all filters
+    const finalFilter = {
+      ...keywordFilter,
+      ...categoryFilter,
+      ...priceFilter,
+    };
+
+    // 4. Pagination
+    const pageSize = 10;
+    const page = Number(pageNumber) || 1;
+    const count = await Product.countDocuments(finalFilter);
+
+    const products = await Product.find(finalFilter)
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+
+    res.json({
+      products,
+      page,
+      pages: Math.ceil(count / pageSize),
+      total: count,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
