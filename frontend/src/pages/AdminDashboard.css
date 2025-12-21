@@ -428,3 +428,233 @@ tbody button:last-child:hover {
         padding: 12px;
     }
 }
+
+/* Additional styles for improved AdminDashboard */
+
+.admin-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 40px;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.admin-section h2 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.add-btn {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%) !important;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%) !important;
+}
+
+/* Form improvements */
+.form-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.form-row input {
+    flex: 1;
+    min-width: 150px;
+}
+
+.product-form textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #e0e6ed;
+    min-height: 80px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.product-form textarea:focus {
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%) !important;
+    flex: 1;
+}
+
+.cancel-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%) !important;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%) !important;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-badge.pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.status-badge.processing {
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+}
+
+.status-badge.shipped {
+    background: rgba(138, 43, 226, 0.2);
+    color: #9b59b6;
+}
+
+.status-badge.delivered {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+.status-badge.cancelled {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+}
+
+/* Role badges */
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.role-badge.admin {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.role-badge.customer {
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+}
+
+/* Status buttons */
+.status-btn {
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+    border-radius: 6px !important;
+}
+
+.status-btn.processing {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%) !important;
+}
+
+.status-btn.shipped {
+    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%) !important;
+}
+
+.status-btn.delivered {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+}
+
+.completed-text {
+    color: #28a745;
+    font-weight: 600;
+}
+
+/* Order specific styles */
+.order-id {
+    font-family: monospace;
+    color: #00d4ff;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 4px 0;
+    font-size: 0.85rem;
+}
+
+.item-name {
+    color: #e0e6ed;
+}
+
+.item-qty {
+    color: #00d4ff;
+    font-weight: 600;
+}
+
+.order-total {
+    font-weight: 700;
+    color: #00d4ff;
+}
+
+/* Low stock warning */
+.low-stock {
+    color: #ff6b6b !important;
+    font-weight: 600;
+}
+
+/* Empty state */
+.empty-message {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 40px 20px;
+    font-style: italic;
+}
+
+.shipping-info {
+    font-size: 0.85rem;
+    color: #b0bdd1;
+    line-height: 1.4;
+}
+
+.text-muted {
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}

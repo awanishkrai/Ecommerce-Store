@@ -6,7 +6,14 @@ import "./ProductCard.css";
 const ProductCard = ({ product, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const navigate = useNavigate();
+
+  // Check if image is a URL or an emoji/placeholder
+  const isValidImageUrl = (img) => {
+    if (!img) return false;
+    return img.startsWith('http') || img.startsWith('/') || img.startsWith('data:');
+  };
 
   const handleAddToCart = async () => {
     setIsAdding(true);
@@ -26,16 +33,34 @@ const ProductCard = ({ product, onAddToCart }) => {
     <div className="product-card">
       {/* Product Image */}
       <div className="product-image" onClick={handleViewDetails}>
-        <img
-          src={product.image}
-          alt={product.name}
-          style={{
-            width: "100%", // full width of container
-            height: "100%", // full height of container
-            objectFit: "cover", // crop or scale to cover container
-            cursor: "pointer",
-          }}
-        />
+        {isValidImageUrl(product.image) && !imageError ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            onError={() => setImageError(true)}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              cursor: "pointer",
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "4rem",
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              cursor: "pointer",
+            }}
+          >
+            {product.image || "📦"}
+          </div>
+        )}
       </div>
 
       {/* Product Info */}

@@ -16,6 +16,13 @@ const ProductDetailPage = () => {
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  // Check if image is a URL or an emoji/placeholder
+  const isValidImageUrl = (img) => {
+    if (!img) return false;
+    return img.startsWith('http') || img.startsWith('/') || img.startsWith('data:');
+  };
 
   // Fetch product data
   const fetchProduct = useCallback(async () => {
@@ -60,17 +67,36 @@ const ProductDetailPage = () => {
           {/* Product Image */}
           <div className="product-image-section">
             <div className="large-product-image">
-              <img
-                src={product.image}
-                alt={product.name}
-                style={{
-                  width: "100%",
-                  maxWidth: "500px",
-                  height: "auto",
-                  borderRadius: "8px",
-                  objectFit: "cover",
-                }}
-              />
+              {isValidImageUrl(product.image) && !imageError ? (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  onError={() => setImageError(true)}
+                  style={{
+                    width: "100%",
+                    maxWidth: "500px",
+                    height: "auto",
+                    borderRadius: "8px",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    maxWidth: "500px",
+                    height: "400px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "8rem",
+                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    borderRadius: "8px",
+                  }}
+                >
+                  {product.image || "📦"}
+                </div>
+              )}
             </div>
           </div>
 
@@ -141,8 +167,8 @@ const ProductDetailPage = () => {
                   {isAdding
                     ? " Added to Cart!"
                     : ` Add to Cart - $${(product.price * quantity).toFixed(
-                        2
-                      )}`}
+                      2
+                    )}`}
                 </button>
               </div>
             </div>

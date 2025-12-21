@@ -119,7 +119,7 @@ const CartPage = () => {
 
         {cart.length === 0 ? (
           <div className="empty-cart">
-            <div className="empty-cart-icon"></div>
+            <div className="empty-cart-icon" style={{ fontSize: "4rem" }}>🛒</div>
             <h2>Your cart is empty</h2>
             <p>Add some products to get started!</p>
             <button className="shop-now-btn" onClick={() => navigate("/")}>
@@ -210,19 +210,42 @@ const CartPage = () => {
 
 // Cart Item Component
 const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
+  // Check if image is a URL or an emoji/placeholder
+  const isValidImageUrl = (img) => {
+    if (!img) return false;
+    return img.startsWith('http') || img.startsWith('/') || img.startsWith('data:');
+  };
+
   return (
     <div className="cart-item">
       <div className="item-image">
-        <img
-          src={item.image}
-          alt={item.name}
-          style={{
-            width: "80px",
-            height: "80px",
-            objectFit: "cover",
-            borderRadius: "8px",
-          }}
-        />
+        {isValidImageUrl(item.image) ? (
+          <img
+            src={item.image}
+            alt={item.name}
+            style={{
+              width: "80px",
+              height: "80px",
+              objectFit: "cover",
+              borderRadius: "8px",
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: "80px",
+              height: "80px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "2rem",
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              borderRadius: "8px",
+            }}
+          >
+            {item.image || "📦"}
+          </div>
+        )}
       </div>
 
       <div className="item-details">

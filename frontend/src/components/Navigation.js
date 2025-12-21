@@ -7,7 +7,7 @@ import Logo from "../Assets/image-removebg-preview.png";
 const Navigation = () => {
   const navigate = useNavigate();
   const { user, admin, logout } = useAuth();
-  const { cart } = useCart();
+  const { getCartItemsCount } = useCart();
 
   const handleUserLogout = () => {
     logout(false); // user logout
@@ -31,7 +31,7 @@ const Navigation = () => {
         {/* Cart only for normal users */}
         {user && (
           <Link to="/cart" className="nav-item">
-            Cart ({cart.length})
+            Cart ({getCartItemsCount()})
           </Link>
         )}
 
@@ -53,8 +53,9 @@ const Navigation = () => {
         {/* User Links */}
         {user && !admin && (
           <>
+            <span className="nav-item user-greeting">Hi, {user.name?.split(' ')[0] || 'User'}!</span>
             <Link to="/user/dashboard" className="nav-item">
-              User Dashboard
+              Dashboard
             </Link>
             <button
               onClick={handleUserLogout}

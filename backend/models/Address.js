@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const adressSchema = new mongoose.Schema(
+
+const addressSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -10,7 +11,14 @@ const adressSchema = new mongoose.Schema(
     city: { type: String, required: true },
     pinCode: { type: Number, required: true },
     country: { type: String, required: true },
+    type: {
+      type: String,
+      enum: ["shipping", "billing"],
+      default: "shipping",
+    },
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("Address", adressSchema);
+
+module.exports = mongoose.model("Address", addressSchema);
+

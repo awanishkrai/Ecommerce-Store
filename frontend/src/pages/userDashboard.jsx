@@ -50,7 +50,8 @@ const UserDashboard = () => {
 
   const handleAddAddress = async () => {
     try {
-      await apiService.addAddress({ ...addressForm, userId: user._id });
+      // Note: API uses req.user._id from the token, so we don't need to send userId
+      await apiService.addAddress(addressForm);
       setAddressForm({ addressLine: "", city: "", pinCode: "", country: "", type: "shipping" });
       fetchUserData();
     } catch (err) {

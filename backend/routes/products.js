@@ -51,7 +51,7 @@ router.get("/:id", async (req, res) => {
 // ------------------ ADMIN ROUTES ------------------
 
 // Create product (Admin)
-router.post("/", protect, adminProtect, async (req, res) => {
+router.post("/", adminProtect, async (req, res) => {
   try {
     const { name, price, description, image, category, stock } = req.body;
 
@@ -75,7 +75,7 @@ router.post("/", protect, adminProtect, async (req, res) => {
 });
 
 // Update product (Admin)
-router.put("/:id", protect, adminProtect, async (req, res) => {
+router.put("/:id", adminProtect, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
@@ -97,7 +97,7 @@ router.put("/:id", protect, adminProtect, async (req, res) => {
 });
 
 // Delete product (Admin)
-router.delete("/:id", protect, adminProtect, async (req, res) => {
+router.delete("/:id", adminProtect, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
@@ -109,10 +109,9 @@ router.delete("/:id", protect, adminProtect, async (req, res) => {
   }
 });
 
-// Upload product image (Admin)
+// Upload product image (Admin only)
 router.post(
   "/upload",
-  protect,
   adminProtect,
   upload.single("image"),
   (req, res) => {
@@ -123,3 +122,4 @@ router.post(
 );
 
 module.exports = router;
+

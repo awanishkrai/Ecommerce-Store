@@ -20,8 +20,9 @@ router.post("/adminLogin", async (req, res) => {
     const admin = await Admin.findOne({ email });
     if (!admin) return res.status(401).json({ message: "Invalid credentials" });
 
-    // Plain password check (no bcrypt, as you had it)
-    if (admin.password !== password)
+    // Use matchPassword for proper password comparison (supports both hashed and plain)
+    const isMatch = await admin.matchPassword(password);
+    if (!isMatch)
       return res.status(401).json({ message: "Invalid credentials" });
 
     const token = generateToken(admin._id);
@@ -65,8 +66,15 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user || !user.matchPassword(password))
+    if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // CRITICAL: Must await the async matchPassword method
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
     res.json({
       _id: user._id,

@@ -94,8 +94,8 @@ const LoginPage = () => {
           </div>
 
           <div className="demo-credentials">
-            <h4>Demo Credentials:</h4>
-            <p>Email: admin@example.com</p>
+            <h4>Demo User Credentials:</h4>
+            <p>Email: john@example.com</p>
             <p>Password: password123</p>
           </div>
         </div>

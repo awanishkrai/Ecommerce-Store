@@ -8,6 +8,7 @@ import CartPage from "./pages/CartPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import Navigation from "./components/Navigation";
+import NotFoundPage from "./pages/NotFoundPage";
 import { useAuth } from "./hooks/useAuth";
 import UserDashboard from "./pages/userDashboard";
 
@@ -63,8 +64,8 @@ const App = () => {
           }
         />
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* 404 Not Found */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

@@ -1,24 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useApp } from "../context/AppContext";
 import { apiService } from "../services/api";
 import { ACTIONS } from "../context/AppContext";
 
 export const useAuth = () => {
   const { user, dispatch } = useApp();
+
+  // Initialize admin from localStorage
   const [admin, setAdmin] = useState(() => {
-    const saved = localStorage.getItem("admin");
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem("admin");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // ✅ Login function for User/Admin separately
-  const login = async (credentials, isAdmin = false) => {
+  // Sync admin state with localStorage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      try {
+        const saved = localStorage.getItem("admin");
+        setAdmin(saved ? JSON.parse(saved) : null);
+      } catch {
+        setAdmin(null);
+      }
+    };
+
+    // Listen for storage changes from other tabs
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  // Login function for User/Admin separately
+  const login = useCallback(async (credentials, isAdmin = false) => {
     try {
       setLoading(true);
       setError(null);
 
-      // ⬅️ Choose correct API endpoint
+      // Choose correct API endpoint
       const response = isAdmin
         ? await apiService.adminLogin(credentials)
         : await apiService.login(credentials);
@@ -48,10 +71,10 @@ export const useAuth = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dispatch]);
 
-  // ✅ Signup → only for normal users
-  const signup = async (userData) => {
+  // Signup → only for normal users
+  const signup = useCallback(async (userData) => {
     try {
       setLoading(true);
       setError(null);
@@ -70,10 +93,10 @@ export const useAuth = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dispatch]);
 
-  // ✅ Logout clears correct storage
-  const logout = (isAdmin = false) => {
+  // Logout clears correct storage
+  const logout = useCallback((isAdmin = false) => {
     if (isAdmin) {
       localStorage.removeItem("admin");
       setAdmin(null);
@@ -81,7 +104,12 @@ export const useAuth = () => {
       localStorage.removeItem("user");
       dispatch({ type: ACTIONS.LOGOUT_USER });
     }
-  };
+  }, [dispatch]);
+
+  // Clear any auth errors
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
 
   return {
     user,
@@ -91,6 +119,7 @@ export const useAuth = () => {
     logout,
     loading,
     error,
+    clearError,
     isAuthenticated: !!user,
     isAdminAuthenticated: !!admin,
   };

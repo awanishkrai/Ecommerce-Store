@@ -15,18 +15,17 @@ const adminSchema = new mongoose.Schema(
 
 /*
  NOTE:
- - We do NOT force-hash passwords here so inserted plain-text admins remain usable.
- - matchPassword below supports both hashed and plain passwords.
+ - matchPassword below supports both hashed and plain passwords for backward compatibility.
+ - New admins will have hashed passwords.
 */
 
-// Optional: keep pre-save hashing *only if* the developer wants to save via model.save()
-// If you prefer not to auto-hash when saving via the model, you can comment out the pre hook.
-// adminSchema.pre("save", async function (next) {
-//   if (!this.isModified("password")) return next();
-//   const salt = await bcrypt.genSalt(10);
-//   this.password = await bcrypt.hash(this.password, salt);
-//   next();
-// });
+// Hash password before saving
+adminSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 
 // Compare password: support both bcrypt-hashed and plain-text stored passwords
 adminSchema.methods.matchPassword = async function (enteredPassword) {

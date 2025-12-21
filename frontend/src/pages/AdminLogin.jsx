@@ -27,13 +27,8 @@ const AdminLogin = () => {
     e.preventDefault();
     try {
       // Call login with admin flag
-      const adminData = await login(formData, true);
-
-      // Save admin token
-      localStorage.setItem("adminToken", adminData.token);
-
-      // Redirect to dashboard
-      navigate("/admin/dashboard");
+      await login(formData, true);
+      // navigation handled by useEffect
     } catch (err) {
       // error handled inside useAuth
     }

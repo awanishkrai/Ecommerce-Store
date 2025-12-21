@@ -17,7 +17,6 @@ export const useProducts = () => {
       dispatch({ type: ACTIONS.SET_PRODUCTS, payload: response.data });
     } catch (error) {
       setError(error.response?.data?.message || "Failed to fetch products");
-      console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }

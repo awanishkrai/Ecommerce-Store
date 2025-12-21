@@ -27,25 +27,26 @@ const AdminDashboard = () => {
 
   const [editingProduct, setEditingProduct] = useState(null);
 
-  // Redirect non-admin users
+  // Redirect non-admin users to admin login
   useEffect(() => {
-    if (!admin) navigate("/login");
+    if (!admin) navigate("/admin/login");
   }, [admin, navigate]);
 
   // Fetch admin data
   const fetchData = async () => {
     try {
       setLoading(true);
-      const usersRes = await apiService.getUsers(true); // Admin token
+      setError("");
+      const usersRes = await apiService.getUsers();
       const productsRes = await apiService.getProducts();
-      const ordersRes = await apiService.getAllOrders(true); // Admin token
+      const ordersRes = await apiService.getAllOrders();
 
-      setUsers(usersRes.data);
-      setProducts(productsRes.data);
-      setOrders(ordersRes.data);
+      setUsers(usersRes.data || []);
+      setProducts(productsRes.data || []);
+      setOrders(ordersRes.data || []);
     } catch (err) {
       console.error(err);
-      setError("Failed to fetch admin data");
+      setError(err.response?.data?.message || "Failed to fetch admin data");
     } finally {
       setLoading(false);
     }
@@ -53,6 +54,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (admin) fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [admin]);
 
   // Handle form input change
@@ -71,10 +73,14 @@ const AdminDashboard = () => {
     }
 
     try {
-      const res = await apiService.createProduct(
-        { name, description, category, image, price, stock },
-        true
-      );
+      const res = await apiService.createProduct({
+        name,
+        description,
+        category,
+        image,
+        price: Number(price),
+        stock: Number(stock),
+      });
       setProducts([...products, res.data]);
       setShowForm(false);
       setFormData({ name: "", description: "", category: "", image: "", price: 0, stock: 0 });
@@ -100,7 +106,11 @@ const AdminDashboard = () => {
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
     try {
-      const res = await apiService.updateProduct(editingProduct, formData, true);
+      const res = await apiService.updateProduct(editingProduct, {
+        ...formData,
+        price: Number(formData.price),
+        stock: Number(formData.stock),
+      });
       setProducts(products.map((p) => (p._id === editingProduct ? res.data : p)));
       setEditingProduct(null);
       setFormData({ name: "", description: "", category: "", image: "", price: 0, stock: 0 });
@@ -119,38 +129,80 @@ const AdminDashboard = () => {
   const handleDeleteProduct = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-      await apiService.deleteProduct(id, true);
+      await apiService.deleteProduct(id);
       setProducts(products.filter((p) => p._id !== id));
     } catch (err) {
       console.error(err);
+      alert(err.response?.data?.message || "Failed to delete product");
     }
   };
 
   // Update order status
   const handleUpdateOrderStatus = async (id, status) => {
     try {
-      await apiService.updateOrderStatus(id, status, true);
+      await apiService.updateOrderStatus(id, status);
       setOrders(orders.map((o) => (o._id === id ? { ...o, status } : o)));
     } catch (err) {
       console.error(err);
+      alert(err.response?.data?.message || "Failed to update order status");
     }
   };
+
+  // Check if image is a URL or emoji
+  const isValidImageUrl = (img) => {
+    if (!img) return false;
+    return img.startsWith("http") || img.startsWith("/") || img.startsWith("data:");
+  };
+
+  // Render product image
+  const renderProductImage = (image, name, size = 50) => {
+    if (isValidImageUrl(image)) {
+      return <img src={image} alt={name} width={size} style={{ borderRadius: "4px" }} />;
+    }
+    return (
+      <div
+        style={{
+          width: size,
+          height: size,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: size > 50 ? "2rem" : "1.5rem",
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          borderRadius: "4px",
+        }}
+      >
+        {image || "📦"}
+      </div>
+    );
+  };
+
+  const handleLogout = () => {
+    logout(true);
+    navigate("/admin/login");
+  };
+
+  if (!admin) {
+    return <div className="admin-dashboard"><p>Redirecting to login...</p></div>;
+  }
 
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
-        <h1>Welcome, {admin?.name}</h1>
-        <button onClick={() => logout(true)}>Logout</button>
+        <h1>Welcome, {admin?.name || "Admin"}</h1>
+        <button onClick={handleLogout} className="logout-btn">Logout</button>
       </header>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p className="loading">Loading...</p>}
       {error && <p className="error">{error}</p>}
 
       {/* Products Section */}
-      <section>
-        <h2>Products</h2>
+      <section className="admin-section">
+        <h2>Products ({products.length})</h2>
         {!showForm && !editingProduct && (
-          <button onClick={() => setShowForm(true)}>Add New Product</button>
+          <button onClick={() => setShowForm(true)} className="add-btn">
+            + Add New Product
+          </button>
         )}
 
         {(showForm || editingProduct) && (
@@ -158,154 +210,239 @@ const AdminDashboard = () => {
             onSubmit={editingProduct ? handleUpdateProduct : handleCreateProduct}
             className="product-form"
           >
-            <input
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Name"
-              required
-            />
-            <input
+            <div className="form-row">
+              <input
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Product Name"
+                required
+              />
+              <input
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                placeholder="Category"
+                required
+              />
+            </div>
+            <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
               placeholder="Description"
               required
             />
-            <input
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="Category"
-              required
-            />
-            <input
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              placeholder="Image URL"
-              required
-            />
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="Price"
-              min="0"
-            />
-            <input
-              type="number"
-              name="stock"
-              value={formData.stock}
-              onChange={handleChange}
-              placeholder="Stock"
-              min="0"
-            />
-            <button type="submit">{editingProduct ? "Update" : "Create"}</button>
-            <button type="button" onClick={editingProduct ? handleCancelEdit : () => setShowForm(false)}>
-              Cancel
-            </button>
+            <div className="form-row">
+              <input
+                name="image"
+                value={formData.image}
+                onChange={handleChange}
+                placeholder="Image URL or Emoji (e.g. 🎧)"
+                required
+              />
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="Price"
+                min="0"
+                step="0.01"
+              />
+              <input
+                type="number"
+                name="stock"
+                value={formData.stock}
+                onChange={handleChange}
+                placeholder="Stock"
+                min="0"
+              />
+            </div>
+            <div className="form-actions">
+              <button type="submit" className="submit-btn">
+                {editingProduct ? "Update Product" : "Create Product"}
+              </button>
+              <button
+                type="button"
+                onClick={editingProduct ? handleCancelEdit : () => setShowForm(false)}
+                className="cancel-btn"
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         )}
 
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Image</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((p) => (
-              <tr key={p._id}>
-                <td>{p.name}</td>
-                <td>{p.description}</td>
-                <td>{p.category}</td>
-                <td>${p.price}</td>
-                <td>{p.stock}</td>
-                <td>
-                  <img src={p.image} alt={p.name} width={50} />
-                </td>
-                <td>
-                  <button onClick={() => handleEditProduct(p)}>Edit</button>
-                  <button onClick={() => handleDeleteProduct(p._id)}>Delete</button>
-                </td>
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {products.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="empty-message">No products found</td>
+                </tr>
+              ) : (
+                products.map((p) => (
+                  <tr key={p._id}>
+                    <td>{renderProductImage(p.image, p.name)}</td>
+                    <td>{p.name}</td>
+                    <td>{p.category}</td>
+                    <td>${Number(p.price).toFixed(2)}</td>
+                    <td className={p.stock <= 5 ? "low-stock" : ""}>{p.stock}</td>
+                    <td className="action-buttons">
+                      <button onClick={() => handleEditProduct(p)} className="edit-btn">
+                        Edit
+                      </button>
+                      <button onClick={() => handleDeleteProduct(p._id)} className="delete-btn">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {/* Users Section */}
-      <section>
-        <h2>Users</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u._id}>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
-                <td>{u.role || "user"}</td>
+      <section className="admin-section">
+        <h2>Users ({users.length})</h2>
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="empty-message">No users found</td>
+                </tr>
+              ) : (
+                users.map((u) => (
+                  <tr key={u._id}>
+                    <td>{u.name}</td>
+                    <td>{u.email}</td>
+                    <td>
+                      <span className={`role-badge ${u.role || "customer"}`}>
+                        {u.role || "customer"}
+                      </span>
+                    </td>
+                    <td>{new Date(u.createdAt).toLocaleDateString()}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {/* Orders Section */}
-      {/* Orders Section */}
-<section>
-  <h2>Orders</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Order ID</th>
-        <th>Products</th>
-        <th>Total</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {orders.map((o) => (
-        <tr key={o._id}>
-          <td>{o._id}</td>
-        
-          <td>
-            {o.orderItems.map((item) => (
-              <div key={item._id} style={{ marginBottom: "5px" }}>
-                <strong>{item.name}</strong> (${item.price}) x {item.quantity}
-              </div>
-            ))}
-          </td>
-          <td>${o.totalPrice}</td>
-          <td>{o.status}</td>
-          <td>
-            {o.status !== "Delivered" && (
-              <button onClick={() => handleUpdateOrderStatus(o._id, "Delivered")}>
-                Mark Delivered
-              </button>
-            )}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</section>
-
+      <section className="admin-section">
+        <h2>Orders ({orders.length})</h2>
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Shipping</th>
+                <th>Products</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="empty-message">No orders found</td>
+                </tr>
+              ) : (
+                orders.map((o) => (
+                  <tr key={o._id}>
+                    <td className="order-id">{o._id.slice(-8)}</td>
+                    <td>{o.user?.name || "Guest"}</td>
+                    <td className="shipping-info">
+                      {o.shippingAddress ? (
+                        <>
+                          <div>{o.shippingAddress.addressLine}</div>
+                          <div>
+                            {o.shippingAddress.city}, {o.shippingAddress.pinCode}
+                          </div>
+                          <div>{o.shippingAddress.country}</div>
+                        </>
+                      ) : (
+                        <span className="text-muted">No address</span>
+                      )}
+                    </td>
+                    <td>
+                      {o.orderItems?.map((item) => (
+                        <div key={item._id} className="order-item">
+                          <span className="item-name">{item.name}</span>
+                          <span className="item-qty">x{item.quantity}</span>
+                        </div>
+                      ))}
+                    </td>
+                    <td className="order-total">${Number(o.totalPrice).toFixed(2)}</td>
+                    <td>
+                      <span className={`status-badge ${o.status}`}>{o.status}</span>
+                    </td>
+                    <td className="action-buttons">
+                      {o.status !== "delivered" && (
+                        <>
+                          {o.status === "pending" && (
+                            <button
+                              onClick={() => handleUpdateOrderStatus(o._id, "processing")}
+                              className="status-btn processing"
+                            >
+                              Process
+                            </button>
+                          )}
+                          {o.status === "processing" && (
+                            <button
+                              onClick={() => handleUpdateOrderStatus(o._id, "shipped")}
+                              className="status-btn shipped"
+                            >
+                              Ship
+                            </button>
+                          )}
+                          {o.status === "shipped" && (
+                            <button
+                              onClick={() => handleUpdateOrderStatus(o._id, "delivered")}
+                              className="status-btn delivered"
+                            >
+                              Deliver
+                            </button>
+                          )}
+                        </>
+                      )}
+                      {o.status === "delivered" && (
+                        <span className="completed-text">✓ Completed</span>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 };
