@@ -1,119 +1,74 @@
-//ProductCard.js
+// ProductCard.js — Allura editorial tile
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ProductCard.css";
 
 const ProductCard = ({ product, onAddToCart }) => {
-  const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [imageError, setImageError] = useState(false);
   const navigate = useNavigate();
 
-  // Check if image is a URL or an emoji/placeholder
-  const isValidImageUrl = (img) => {
-    if (!img) return false;
-    return img.startsWith('http') || img.startsWith('/') || img.startsWith('data:');
-  };
+  const hasValidImage = (img) =>
+    img && (img.startsWith("http") || img.startsWith("/") || img.startsWith("data:"));
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (e) => {
+    e.stopPropagation();
     setIsAdding(true);
-    await onAddToCart(product, quantity);
-
-    // Show feedback
-    setTimeout(() => {
-      setIsAdding(false);
-    }, 500);
+    await onAddToCart(product, 1);
+    setTimeout(() => setIsAdding(false), 800);
   };
 
-  const handleViewDetails = () => {
+  const handleClick = () => {
     navigate(`/product/${product._id}`);
   };
 
   return (
-    <div className="product-card">
-      {/* Product Image */}
-      <div className="product-image" onClick={handleViewDetails}>
-        {isValidImageUrl(product.image) && !imageError ? (
+    <article
+      className="product-tile"
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && handleClick()}
+      aria-label={`${product.name}, $${product.price?.toFixed(2)}`}
+    >
+      {/* Image */}
+      <div className="tile-image">
+        {hasValidImage(product.image) && !imageError ? (
           <img
             src={product.image}
             alt={product.name}
             onError={() => setImageError(true)}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              cursor: "pointer",
-            }}
           />
         ) : (
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "4rem",
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-              cursor: "pointer",
-            }}
-          >
-            {product.image || "📦"}
+          <div className="tile-placeholder" />
+        )}
+
+        {/* Hover overlay — "Add to bag" */}
+        {product.inStock && (
+          <div className="tile-overlay">
+            <button
+              className={`tile-add-btn ${isAdding ? "tile-add-btn--added" : ""}`}
+              onClick={handleAddToCart}
+              disabled={isAdding}
+              aria-label={`Add ${product.name} to bag`}
+            >
+              {isAdding ? "Added" : "Add to bag"}
+            </button>
           </div>
+        )}
+
+        {!product.inStock && (
+          <span className="tile-sold-out">Sold out</span>
         )}
       </div>
 
-      {/* Product Info */}
-      <div className="product-info">
-        <h3 className="product-name">{product.name}</h3>
-        <p className="product-category">{product.category}</p>
-        <p className="product-price">${product.price.toFixed(2)}</p>
-        <div className="product-stock">
-          {product.inStock ? (
-            <span className="in-stock"> In Stock</span>
-          ) : (
-            <span className="out-of-stock"> Out of Stock</span>
-          )}
-        </div>
+      {/* Meta */}
+      <div className="tile-meta">
+        <span className="tile-category">{product.category}</span>
+        <span className="tile-name">{product.name}</span>
+        <span className="tile-price">${product.price?.toFixed(2)}</span>
       </div>
-
-      {/* Product Actions */}
-      <div className="product-actions">
-        <div className="quantity-selector">
-          <button
-            onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            disabled={quantity <= 1}
-          >
-            -
-          </button>
-          <span>{quantity}</span>
-          <button
-            onClick={() =>
-              setQuantity(
-                product.stock
-                  ? Math.min(product.stock, quantity + 1)
-                  : quantity + 1
-              )
-            }
-            disabled={product.stock ? quantity >= product.stock : false}
-          >
-            +
-          </button>
-        </div>
-
-        <button className="view-details-btn" onClick={handleViewDetails}>
-          View Details
-        </button>
-
-        <button
-          className={`add-to-cart-btn ${isAdding ? "adding" : ""}`}
-          onClick={handleAddToCart}
-          disabled={!product.inStock || isAdding}
-        >
-          {isAdding ? " Added!" : " Add to Cart"}
-        </button>
-      </div>
-    </div>
+    </article>
   );
 };
 

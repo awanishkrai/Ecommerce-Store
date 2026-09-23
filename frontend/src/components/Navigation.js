@@ -3,85 +3,82 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
 import "./Navigation.css";
-import Logo from "../Assets/image-removebg-preview.png";
-const Navigation = () => {
+
+const BagIcon = ({ count, onClick }) => (
+  <button className="nav-bag" onClick={onClick} aria-label={`Open bag, ${count} items`}>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <path d="M16 10a4 4 0 01-8 0" />
+    </svg>
+    {count > 0 && <span className="bag-count">{count}</span>}
+  </button>
+);
+
+const Navigation = ({ onOpenCart }) => {
   const navigate = useNavigate();
   const { user, admin, logout } = useAuth();
   const { getCartItemsCount } = useCart();
 
   const handleUserLogout = () => {
-    logout(false); // user logout
+    logout(false);
     navigate("/login");
   };
 
   const handleAdminLogout = () => {
-    logout(true); // admin logout
+    logout(true);
     navigate("/admin/login");
   };
 
   return (
-    <nav className="navigation bg-gray-800 text-white p-4 flex justify-between">
+    <nav className="allura-nav" role="navigation" aria-label="Main navigation">
+      {/* Left — Wordmark */}
       <div className="nav-left">
-        <Link to="/" className="nav-logo font-bold text-xl">
-          <img src={Logo} alt="Logo" className="kk" />
-        </Link>
+        <Link to="/" className="nav-wordmark">Allura</Link>
       </div>
 
-      <div className="nav-right flex items-center gap-4">
-        {/* Cart only for normal users */}
-        {user && (
-          <Link to="/cart" className="nav-item">
-            Cart ({getCartItemsCount()})
-          </Link>
-        )}
+      {/* Centre — Primary links */}
+      <div className="nav-centre">
+        <Link to="/" className="nav-link">Shop</Link>
+        <Link to="/" className="nav-link">Journal</Link>
+      </div>
 
-        {/* Admin Links */}
+      {/* Right — Context-aware auth + bag */}
+      <div className="nav-right">
+        {/* Admin */}
         {admin && (
           <>
-            <Link to="/admin/dashboard" className="nav-item">
-              Admin Dashboard
-            </Link>
-            <button
-              onClick={handleAdminLogout}
-              className="nav-item btn-logout bg-red-600 px-3 py-1 rounded"
-            >
-              Admin Logout
+            <Link to="/admin/dashboard" className="nav-link">Dashboard</Link>
+            <button onClick={handleAdminLogout} className="nav-link nav-link--action">
+              Sign out
             </button>
           </>
         )}
 
-        {/* User Links */}
+        {/* Logged-in user */}
         {user && !admin && (
           <>
-            <span className="nav-item user-greeting">Hi, {user.name?.split(' ')[0] || 'User'}!</span>
-            <Link to="/user/dashboard" className="nav-item">
-              Dashboard
-            </Link>
-            <button
-              onClick={handleUserLogout}
-              className="nav-item btn-logout bg-red-600 px-3 py-1 rounded"
-            >
-              Logout
+            <span className="nav-greeting">
+              {user.name?.split(" ")[0] || "Account"}
+            </span>
+            <Link to="/user/dashboard" className="nav-link">Orders</Link>
+            <button onClick={handleUserLogout} className="nav-link nav-link--action">
+              Sign out
             </button>
           </>
         )}
 
-        {/* If nobody logged in, show both logins */}
+        {/* Logged-out */}
         {!user && !admin && (
           <>
-            <Link
-              to="/login"
-              className="nav-item bg-blue-600 px-3 py-1 rounded"
-            >
-              User Login
-            </Link>
-            <Link
-              to="/admin/login"
-              className="nav-item bg-green-600 px-3 py-1 rounded"
-            >
-              Admin Login
-            </Link>
+            <Link to="/login" className="nav-link">Sign in</Link>
+            <Link to="/admin/login" className="nav-link nav-link--muted">Admin</Link>
           </>
+        )}
+
+        {/* Bag — only for users (not admins) */}
+        {!admin && (
+          <BagIcon count={getCartItemsCount()} onClick={onOpenCart} />
         )}
       </div>
     </nav>
@@ -89,3 +86,4 @@ const Navigation = () => {
 };
 
 export default Navigation;
+

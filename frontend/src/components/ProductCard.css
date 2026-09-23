@@ -1,187 +1,131 @@
-/* Product Card Container */
-.product-card {
-    background: var(--bg-card);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    border: 1px solid transparent;
+/* ─── Allura Product Tile ───────────────────────────────────────────── */
+/* No card chrome — no border-radius, no box-shadow, no uniform sizing  */
+
+.product-tile {
+  break-inside: avoid;
+  background: var(--paper);
+  cursor: pointer;
+  display: block;
+  margin-bottom: 1px; /* hairline between rows via masonry bg */
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-    border-color: rgba(var(--primary-color), 0.2);
+.product-tile:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: -1px;
 }
 
-/* Image Section */
-.product-image {
-    height: 250px;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    background: var(--bg-body);
+/* ─── Image area ─────────────────────────────────────────────────────── */
+.tile-image {
+  position: relative;
+  overflow: hidden;
+  background: var(--sand);
 }
 
-.product-image img {
-    transition: transform 0.6s ease;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.tile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 150ms ease;
 }
 
-.product-card:hover .product-image img {
-    transform: scale(1.05);
+.tile-placeholder {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--sand);
 }
 
-/* Info Section */
-.product-info {
-    padding: 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+.product-tile:hover .tile-image img {
+  opacity: 0.88;
 }
 
-.product-name {
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    color: var(--text-main);
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    line-height: 1.3;
+/* ─── Hover overlay ──────────────────────────────────────────────────── */
+.tile-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem 1rem 0.875rem;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 150ms ease, transform 150ms ease;
+  display: flex;
+  justify-content: center;
 }
 
-.product-category {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    color: var(--primary-color);
-    letter-spacing: 0.5px;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+.product-tile:hover .tile-overlay {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.product-price {
-    font-size: 1.4rem;
-    color: var(--text-main);
-    font-weight: 700;
-    margin-bottom: 1rem;
+.tile-add-btn {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: none;
+  padding: 0.625rem 1.5rem;
+  cursor: pointer;
+  transition: background var(--transition-fast), opacity var(--transition-fast);
+  width: 100%;
 }
 
-.product-stock {
-    margin-bottom: 1rem;
+.tile-add-btn:hover {
+  background: var(--oxblood);
 }
 
-.in-stock {
-    color: var(--success);
-    font-weight: 500;
-    font-size: 0.9rem;
+.tile-add-btn--added {
+  background: var(--oxblood);
+  opacity: 0.85;
 }
 
-.out-of-stock {
-    color: var(--error);
-    font-weight: 500;
-    font-size: 0.9rem;
+/* Sold out badge */
+.tile-sold-out {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  background: var(--paper);
+  padding: 0.25rem 0.625rem;
 }
 
-/* Actions Section */
-.product-actions {
-    padding: 0 1.5rem 1.5rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    align-items: center;
+/* ─── Meta ───────────────────────────────────────────────────────────── */
+.tile-meta {
+  padding: 0.875rem 0.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
-/* Quantity Selector */
-.quantity-selector {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-    background: var(--bg-body);
-    padding: 0.5rem;
-    border-radius: var(--radius-full);
+.tile-category {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
 }
 
-.quantity-selector button {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 1px solid var(--border-color);
-    background: white;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-fast);
+.tile-name {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.35;
 }
 
-.quantity-selector button:hover:not(:disabled) {
-    background: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
-
-.quantity-selector button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.quantity-selector span {
-    font-weight: 600;
-    min-width: 20px;
-    text-align: center;
-    color: var(--text-main);
-}
-
-/* Buttons */
-.view-details-btn,
-.add-to-cart-btn {
-    padding: 0.75rem;
-    border: none;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all var(--transition-fast);
-}
-
-.view-details-btn {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
-}
-
-.view-details-btn:hover {
-    background: var(--bg-body);
-    border-color: var(--text-main);
-}
-
-.add-to-cart-btn {
-    background: var(--primary-color);
-    color: white;
-}
-
-.add-to-cart-btn:hover:not(:disabled) {
-    background: var(--primary-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-}
-
-.add-to-cart-btn:disabled {
-    background: var(--text-muted);
-    cursor: not-allowed;
-}
-
-/* Added State */
-.add-to-cart-btn.adding {
-    background: var(--success);
+.tile-price {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--charcoal);
+  margin-top: 0.125rem;
 }

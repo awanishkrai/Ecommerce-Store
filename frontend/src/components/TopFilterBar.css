@@ -1,0 +1,170 @@
+/* ─── Top Filter Bar ────────────────────────────────────────────────── */
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--stone);
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-label {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stone);
+  white-space: nowrap;
+}
+
+.filter-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--charcoal);
+  background: none;
+  border: 1px solid var(--sand);
+  padding: 0.3rem 0.875rem;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.filter-chip:hover {
+  border-color: var(--charcoal);
+  color: var(--ink);
+}
+
+.filter-chip--active {
+  border-color: var(--ink);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.filter-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--stone);
+  flex-shrink: 0;
+}
+
+/* Mobile trigger — hidden on desktop */
+.filter-mobile-trigger {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  border: 1px solid var(--stone);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.filter-mobile-trigger:hover {
+  border-color: var(--ink);
+}
+
+/* ─── Mobile Filter Drawer ──────────────────────────────────────────── */
+
+.filter-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(22, 20, 18, 0.4);
+  z-index: 150;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filter-drawer {
+  width: min(320px, 85vw);
+  height: 100%;
+  background: var(--paper);
+  border-left: 1px solid var(--stone);
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.filter-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-drawer-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--ink);
+}
+
+.filter-drawer-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--charcoal);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.filter-drawer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-drawer-option {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--charcoal);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--sand);
+  padding: 0.75rem 0;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.filter-drawer-option:hover,
+.filter-drawer-option.active {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .filter-group,
+  .filter-divider {
+    display: none;
+  }
+
+  .filter-mobile-trigger {
+    display: flex;
+  }
+}

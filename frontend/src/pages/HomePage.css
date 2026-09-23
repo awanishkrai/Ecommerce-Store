@@ -1,148 +1,392 @@
-/* Existing imports... */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+/* ─── HomePage — Allura Editorial Layout ────────────────────────────── */
 
-/* Keep global resets... */
-
-.home-page {
-    font-family: var(--font-sans);
-    line-height: 1.6;
-    color: var(--text-main);
-    background-color: var(--bg-body);
-    min-height: 100vh;
+/* ─── Asymmetric Hero ───────────────────────────────────────────────── */
+.hero {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  min-height: 90vh;
+  border-bottom: 1px solid var(--stone);
 }
 
-/* Hero Section Updates */
-.hero-section {
-    background: linear-gradient(135deg, var(--bg-body) 0%, #e0e7ff 100%);
-    padding: 80px 20px 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+.hero-image {
+  overflow: hidden;
+  background: var(--sand);
 }
 
-.hero-section h1 {
-    font-family: var(--font-serif);
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin-bottom: 1rem;
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
 }
 
-.hero-section p {
-    font-size: 1.2rem;
-    color: var(--text-muted);
-    max-width: 600px;
-    margin-bottom: 2rem;
+.hero-image img:hover {
+  opacity: 0.92;
 }
 
-/* Search Bar */
-.search-bar {
-    display: flex;
-    width: 100%;
-    max-width: 500px;
-    gap: 0.5rem;
+.hero-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--sand);
 }
 
-.search-bar input {
-    flex: 1;
-    padding: 1rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-full);
-    font-size: 1rem;
-    box-shadow: var(--shadow-sm);
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 4rem 3.5rem;
+  background: var(--paper);
 }
 
-.search-bar button {
-    padding: 0 1.5rem;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: var(--radius-full);
-    font-weight: 600;
-    cursor: pointer;
-    transition: background var(--transition-fast);
+.hero-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 1.25rem;
 }
 
-.search-bar button:hover {
-    background: var(--primary-hover);
+.hero-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 4vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+  white-space: pre-line;
 }
 
-/* Layout Container */
-.main-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    /* Sidebar | Content */
-    gap: 40px;
+.hero-price {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--charcoal);
+  margin-bottom: 2.5rem;
 }
 
-.sidebar {
-    position: sticky;
-    top: 20px;
-    height: fit-content;
+.hero-cta {
+  align-self: flex-start;
+  background: var(--oxblood);
+  color: var(--paper);
+  border: none;
+  padding: 1rem 2.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
 }
 
-/* Products Grid */
-.products-section h2 {
-    font-family: var(--font-serif);
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    color: var(--text-main);
+.hero-cta:hover {
+  opacity: 0.88;
 }
 
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    /* Responsive grid */
-    gap: 20px;
+/* ─── Editorial Strip ───────────────────────────────────────────────── */
+.editorial-strip {
+  display: grid;
+  grid-template-columns: 2fr 3fr 2fr;
+  grid-template-rows: auto;
+  gap: 1px;
+  background: var(--stone); /* gap + bg = hairline dividers */
+  border-bottom: 1px solid var(--stone);
+}
+
+.strip-tile {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--paper);
+  aspect-ratio: auto;
+}
+
+/* First tile: tall portrait */
+.strip-tile--1 { aspect-ratio: 3 / 4; }
+/* Second tile: wide landscape */
+.strip-tile--2 { aspect-ratio: 5 / 4; }
+/* Third tile: standard */
+.strip-tile--3 { aspect-ratio: 3 / 4; }
+
+.strip-tile img,
+.strip-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 150ms ease;
+}
+
+.strip-placeholder {
+  background: var(--sand);
+}
+
+.strip-tile:hover img {
+  opacity: 0.88;
+}
+
+.strip-meta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.25rem;
+  background: linear-gradient(to top, rgba(22,20,18,0.5) 0%, transparent 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.strip-name {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--paper);
+}
+
+.strip-price {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--paper);
+}
+
+/* ─── The Edit — Horizontal Category Scroll ─────────────────────────── */
+.the-edit {
+  padding: 4rem 3rem;
+  background: var(--sand);
+  border-bottom: 1px solid var(--stone);
+}
+
+.the-edit-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 2rem;
+  letter-spacing: -0.01em;
+}
+
+.the-edit-track {
+  display: flex;
+  gap: 1px;
+  overflow-x: auto;
+  background: var(--stone);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.the-edit-track::-webkit-scrollbar {
+  display: none;
+}
+
+.edit-card {
+  flex: 0 0 280px;
+  height: 360px;
+  position: relative;
+  background: var(--paper);
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  transition: background var(--transition-fast);
+}
+
+.edit-card:hover {
+  background: var(--sand);
+}
+
+.edit-card-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--sand);
+}
+
+.edit-card-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--ink);
+  text-align: left;
+}
+
+/* ─── Search ─────────────────────────────────────────────────────────── */
+.search-section {
+  padding: 2.5rem 3rem;
+  border-bottom: 1px solid var(--stone);
+}
+
+.search-form {
+  display: flex;
+  max-width: 560px;
+  gap: 0;
+}
+
+.search-form input {
+  flex: 1;
+  border: 1px solid var(--stone);
+  border-right: none;
+  padding: 0.875rem 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--ink);
+  background: var(--paper);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.search-form input:focus {
+  border-color: var(--ink);
+}
+
+.search-form input::placeholder {
+  color: var(--stone);
+}
+
+.search-form button {
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  padding: 0.875rem 1.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.search-form button:hover {
+  opacity: 0.8;
+}
+
+/* ─── Collection (Masonry + Filter) ─────────────────────────────────── */
+.collection {
+  padding: 3rem 3rem 5rem;
+}
+
+.collection-inner {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .no-results {
-    text-align: center;
-    font-size: 1.5rem;
-    color: var(--text-muted);
-    padding: 4rem;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--stone);
+  text-align: center;
+  padding: 6rem 0;
 }
 
-/* Pagination */
+/* CSS masonry — variable height tiles, no uniform grid */
+.masonry-grid {
+  columns: 4 260px;
+  column-gap: 1px;
+  background: var(--stone);
+  border: 1px solid var(--stone);
+}
+
+/* ─── Pagination ─────────────────────────────────────────────────────── */
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--stone);
 }
 
-.pagination button {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-color);
-    background: white;
-    border-radius: var(--radius-md);
-    cursor: pointer;
+.page-btn {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  border: 1px solid var(--stone);
+  padding: 0.625rem 1.5rem;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
 }
 
-.pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.page-btn:hover:not(:disabled) {
+  border-color: var(--ink);
 }
 
-.pagination button:hover:not(:disabled) {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .main-container {
-        grid-template-columns: 1fr;
-        /* Stack sidebar and content */
-    }
+.page-indicator {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--charcoal);
+}
 
-    .sidebar {
-        position: static;
-        margin-bottom: 2rem;
-    }
+/* ─── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .hero-image {
+    height: 60vw;
+    min-height: 280px;
+  }
+
+  .hero-copy {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .editorial-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .strip-tile--3 {
+    display: none;
+  }
+
+  .the-edit,
+  .search-section,
+  .collection {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .masonry-grid {
+    columns: 2 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .editorial-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .strip-tile--2,
+  .strip-tile--3 {
+    display: none;
+  }
+
+  .masonry-grid {
+    columns: 2 140px;
+  }
 }

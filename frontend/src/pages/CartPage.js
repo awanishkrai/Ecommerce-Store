@@ -99,6 +99,10 @@ const CartPage = () => {
     return <LoadingSpinner message="Processing your order..." />;
   }
 
+  if (loading) {
+    return <LoadingSpinner message="Loading checkout details..." />;
+  }
+
   if (orderSuccess) {
     return (
       <div className="success-page">
@@ -121,6 +125,8 @@ const CartPage = () => {
           </button>
           <h1>Your Cart ({cart.length} items)</h1>
         </div>
+
+        {error && <div className="error-message" style={{ marginBottom: "1.5rem" }}>{error}</div>}
 
         {cart.length === 0 ? (
           <div className="empty-cart">

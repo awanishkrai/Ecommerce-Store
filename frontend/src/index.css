@@ -1,4 +1,8 @@
-/* Modern CSS Reset */
+/* ─── Allura Global Foundation ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500&display=swap');
+@import './styles/variables.css';
+
+/* ─── Modern CSS Reset ──────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -15,11 +19,12 @@ body {
 }
 
 body {
-  line-height: 1.5;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   font-family: var(--font-sans);
-  background-color: var(--bg-body);
-  color: var(--text-main);
+  font-weight: 400;
+  background-color: var(--paper);
+  color: var(--ink);
 }
 
 img,
@@ -48,25 +53,36 @@ h6 {
   overflow-wrap: break-word;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 #root {
   isolation: isolate;
   height: 100%;
 }
 
-/* Custom scrollbar */
+/* ─── Text selection ────────────────────────────────────────────────── */
+::selection {
+  background: var(--oxblood);
+  color: var(--paper);
+}
+
+/* ─── Custom scrollbar ──────────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-body);
+  background: var(--paper);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  border-radius: var(--radius-full);
+  background: var(--stone);
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
+  background: var(--charcoal);
+}

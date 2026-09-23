@@ -64,11 +64,19 @@ const SignupPage = () => {
 
   return (
     <div className="auth-page">
+      {/* Left editorial panel */}
+      <div className="auth-image-panel" aria-hidden="true">
+        <p className="auth-image-tagline">
+          Crafted pieces,<br />timeless presence.
+        </p>
+      </div>
+
+      {/* Right form panel */}
       <div className="auth-container">
         <div className="auth-card">
           <div className="auth-header">
             <h1>Create Account</h1>
-            <p>Join us and start shopping!</p>
+            <p>Join Allura for a curated experience</p>
           </div>
 
           {(error || validationError) && (
@@ -85,7 +93,8 @@ const SignupPage = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                placeholder="Enter your full name"
+                placeholder="Eleanor Vance"
+                autoComplete="name"
               />
             </div>
 
@@ -98,7 +107,8 @@ const SignupPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="Enter your email"
+                placeholder="your@email.com"
+                autoComplete="email"
               />
             </div>
 
@@ -111,8 +121,9 @@ const SignupPage = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                placeholder="Create a password"
+                placeholder="••••••••"
                 minLength={6}
+                autoComplete="new-password"
               />
             </div>
 
@@ -125,23 +136,19 @@ const SignupPage = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                placeholder="Confirm your password"
+                placeholder="••••••••"
                 minLength={6}
+                autoComplete="new-password"
               />
             </div>
 
             <button type="submit" className="auth-btn" disabled={loading}>
-              {loading ? "Creating Account..." : "Create Account"}
+              {loading ? "Creating Account…" : "Create Account"}
             </button>
           </form>
 
-          <div className="auth-footer">
-            <p>
-              Already have an account?{" "}
-              <Link to="/login" className="auth-link">
-                Sign in here
-              </Link>
-            </p>
+          <div className="auth-links">
+            <Link to="/login">Already have an account? Sign in</Link>
           </div>
         </div>
       </div>

@@ -42,10 +42,18 @@ const LoginPage = () => {
 
   return (
     <div className="auth-page">
+      {/* Left editorial panel */}
+      <div className="auth-image-panel" aria-hidden="true">
+        <p className="auth-image-tagline">
+          Chosen with care,<br />just for you.
+        </p>
+      </div>
+
+      {/* Right form panel */}
       <div className="auth-container">
         <div className="auth-card">
           <div className="auth-header">
-            <h1>Welcome Back</h1>
+            <h1>Welcome back</h1>
             <p>Sign in to your account</p>
           </div>
 
@@ -53,7 +61,7 @@ const LoginPage = () => {
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="form-group">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email">Email</label>
               <input
                 type="email"
                 id="email"
@@ -61,7 +69,8 @@ const LoginPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="Enter your email"
+                placeholder="your@email.com"
+                autoComplete="email"
               />
             </div>
 
@@ -74,23 +83,24 @@ const LoginPage = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                placeholder="Enter your password"
+                placeholder="••••••••"
                 minLength={6}
+                autoComplete="current-password"
               />
             </div>
 
             <button type="submit" className="auth-btn" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
+              {loading ? "Signing in…" : "Sign in"}
             </button>
           </form>
 
           <div className="auth-links">
-            <Link to="/forgot-password">Forgot Password?</Link>
-            <Link to="/signup">Don't have an account? Sign up</Link>
+            <Link to="/forgot-password">Forgot your password?</Link>
+            <Link to="/signup">Don't have an account? Create one</Link>
           </div>
 
           <div className="demo-credentials">
-            <h4>Demo User Credentials:</h4>
+            <h4>Demo credentials</h4>
             <p>Email: john@example.com</p>
             <p>Password: password123</p>
           </div>

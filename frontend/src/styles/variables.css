@@ -1,51 +1,46 @@
-/* Modern Premium Design System */
+/* Allura Editorial Design System */
 :root {
-  /* 🎨 Color Palette */
-  --primary-color: #4f46e5;       /* Indigo 600 */
-  --primary-hover: #4338ca;       /* Indigo 700 */
-  --secondary-color: #10b981;     /* Emerald 500 */
-  --accent-color: #f59e0b;        /* Amber 500 */
-  
-  /* 🌑 Neutrals */
-  --bg-body: #f3f4f6;             /* Gray 100 */
-  --bg-card: #ffffff;
-  --text-main: #111827;           /* Gray 900 */
-  --text-muted: #6b7280;          /* Gray 500 */
-  --border-color: #e5e7eb;        /* Gray 200 */
+  /* ─── Core Palette ─────────────────────────────────── */
+  --ink:      #161412;   /* near-black warm ink — primary text, nav, footer  */
+  --paper:    #F7F5F1;   /* warm paper white — page background                */
+  --oxblood:  #8A1F11;   /* deep oxblood — CTAs, price emphasis, active states */
+  --stone:    #C9C2B4;   /* warm stone — dividers, muted borders, secondary text */
+  --sand:     #E8E3D9;   /* soft sand — section backgrounds                   */
+  --charcoal: #4A4640;   /* warm charcoal — body copy, captions               */
 
-  /* 🔴 Status */
-  --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b;
-  --info: #3b82f6;
+  /* ─── Legacy aliases (keeps old references from breaking) ── */
+  --bg-body:      var(--paper);
+  --bg-card:      var(--paper);
+  --text-main:    var(--ink);
+  --text-muted:   var(--charcoal);
+  --border-color: var(--stone);
+  --primary-color: var(--oxblood);
+  --primary-hover: #6e1809;
 
-  /* 📐 Layout & Spacing */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
-  --radius-full: 9999px;
+  /* ─── Status ────────────────────────────────────────── */
+  --success: #3a6b47;
+  --error:   var(--oxblood);
+  --warning: #8a6b1f;
+  --info:    var(--charcoal);
 
-  /* ☁️ Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  
-  /* 🔤 Typography */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Playfair Display', serif;
-  
-  /* 🔄 Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-}
+  /* ─── Geometry ──────────────────────────────────────── */
+  /* Editorial: minimal rounding, hairline borders replace shadows */
+  --radius-sm:   2px;
+  --radius-md:   2px;
+  --radius-lg:   2px;
+  --radius-full: 2px;
 
-/* Dark Mode Support (Future Proofing) */
-@media (prefers-color-scheme: dark) {
-  /* :root {
-    --bg-body: #111827;
-    --bg-card: #1f2937;
-    --text-main: #f9fafb;
-    --text-muted: #9ca3af;
-    --border-color: #374151;
-  } */
+  /* No box-shadows — borders do the work */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+
+  /* ─── Typography ────────────────────────────────────── */
+  --font-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+
+  /* ─── Motion ────────────────────────────────────────── */
+  --transition-fast:   150ms ease;
+  --transition-normal: 320ms ease;
+  --transition-drawer: 320ms ease;
 }
